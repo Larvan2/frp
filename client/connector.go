@@ -26,7 +26,8 @@ import (
 
 	libnet "github.com/fatedier/golib/net"
 	fmux "github.com/hashicorp/yamux"
-	quic "github.com/quic-go/quic-go"
+	common "github.com/metacubex/mihomo/transport/tuic/common"
+	quic "github.com/metacubex/quic-go"
 	"github.com/samber/lo"
 
 	v1 "github.com/fatedier/frp/pkg/config/v1"
@@ -97,6 +98,7 @@ func (c *defaultConnectorImpl) Open() error {
 				MaxIncomingStreams: int64(c.cfg.Transport.QUIC.MaxIncomingStreams),
 				KeepAlivePeriod:    time.Duration(c.cfg.Transport.QUIC.KeepalivePeriod) * time.Second,
 			})
+		common.SetCongestionController(conn, "bbr", 32)
 		if err != nil {
 			return err
 		}

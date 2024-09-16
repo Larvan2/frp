@@ -23,7 +23,8 @@ import (
 	"time"
 
 	fmux "github.com/hashicorp/yamux"
-	"github.com/quic-go/quic-go"
+	"github.com/metacubex/mihomo/transport/tuic/common"
+	"github.com/metacubex/quic-go"
 
 	v1 "github.com/fatedier/frp/pkg/config/v1"
 	"github.com/fatedier/frp/pkg/msg"
@@ -187,6 +188,7 @@ func (pxy *XTCPProxy) listenByQUIC(listenConn *net.UDPConn, _ *net.UDPAddr, star
 		xl.Errorf("quic accept connection error: %v", err)
 		return
 	}
+	common.SetCongestionController(c, "bbr", 32)
 	for {
 		stream, err := c.AcceptStream(pxy.ctx)
 		if err != nil {

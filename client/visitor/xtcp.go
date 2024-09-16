@@ -26,7 +26,8 @@ import (
 
 	libio "github.com/fatedier/golib/io"
 	fmux "github.com/hashicorp/yamux"
-	quic "github.com/quic-go/quic-go"
+	"github.com/metacubex/mihomo/transport/tuic/common"
+	quic "github.com/metacubex/quic-go"
 	"golang.org/x/time/rate"
 
 	v1 "github.com/fatedier/frp/pkg/config/v1"
@@ -422,6 +423,7 @@ func (qs *QUICTunnelSession) Init(listenConn *net.UDPConn, raddr *net.UDPAddr) e
 	if err != nil {
 		return fmt.Errorf("dial quic error: %v", err)
 	}
+	common.SetCongestionController(quicConn, "bbr", 32)
 	qs.mu.Lock()
 	qs.session = quicConn
 	qs.listenConn = listenConn
