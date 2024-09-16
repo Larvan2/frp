@@ -15,16 +15,38 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.23'
           
       - name: Make All
         run: |
           ./package.sh
 
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v5
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
         with:
-          version: latest
-          args: release --clean --release-notes=./Release.md
+          name: release
+          path: ./release
+
+      - name: Delete current release assets
+        uses: 8Mi-Tech/delete-release-assets-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: Prerelease-${{ github.ref_name }}
+          deleteOnlyFromDrafts: false
+
+      - name: Tag Repo
+        uses: richardsimko/update-tag@v1
+        with:
+          tag_name: Prerelease-${{ github.ref_name }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GPR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Prerelease
+        uses: softprops/action-gh-release@v1
+        if: ${{  success() }}
+        with:
+          tag_name: Prerelease
+          files: |
+            release/*
+          prerelease: true
+          generate_release_notes: true
