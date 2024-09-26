@@ -26,7 +26,7 @@ import (
 
 	libnet "github.com/fatedier/golib/net"
 	fmux "github.com/hashicorp/yamux"
-	quic "github.com/quic-go/quic-go"
+	quic "github.com/metacubex/quic-go"
 	"github.com/samber/lo"
 
 	v1 "github.com/fatedier/frp/pkg/config/v1"
@@ -92,14 +92,18 @@ func (c *defaultConnectorImpl) Open() error {
 		conn, err := quic.DialAddr(
 			c.ctx,
 			net.JoinHostPort(c.cfg.ServerAddr, strconv.Itoa(c.cfg.ServerPort)),
-			tlsConfig, &quic.Config{
+			tlsConfig,
+			&quic.Config{
 				MaxIdleTimeout:     time.Duration(c.cfg.Transport.QUIC.MaxIdleTimeout) * time.Second,
 				MaxIncomingStreams: int64(c.cfg.Transport.QUIC.MaxIncomingStreams),
 				KeepAlivePeriod:    time.Duration(c.cfg.Transport.QUIC.KeepalivePeriod) * time.Second,
+				EnableDatagrams:    true,
+				Allow0RTT:          true,
 			})
 		if err != nil {
 			return err
 		}
+		netpkg.SetCongestionController(conn, c.cfg.Transport.QUIC.CongestionControl, c.cfg.Transport.QUIC.InitCwnd)
 		c.quicConn = conn
 		return nil
 	}
