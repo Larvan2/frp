@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"github.com/fatedier/golib/crypto"
-	quic "github.com/quic-go/quic-go"
+	quic "github.com/metacubex/quic-go"
 
 	"github.com/fatedier/frp/pkg/util/xlog"
 )

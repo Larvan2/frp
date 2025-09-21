@@ -48,15 +48,19 @@ const (
 
 // QUIC protocol options
 type QUICOptions struct {
-	KeepalivePeriod    int `json:"keepalivePeriod,omitempty"`
-	MaxIdleTimeout     int `json:"maxIdleTimeout,omitempty"`
-	MaxIncomingStreams int `json:"maxIncomingStreams,omitempty"`
+	KeepalivePeriod    int    `json:"keepalivePeriod,omitempty"`
+	MaxIdleTimeout     int    `json:"maxIdleTimeout,omitempty"`
+	MaxIncomingStreams int    `json:"maxIncomingStreams,omitempty"`
+	InitCwnd           int    `json:"initCwnd,omitempty"`
+	CongestionControl  string `json:"congestionControl,omitempty"`
 }
 
 func (c *QUICOptions) Complete() {
 	c.KeepalivePeriod = util.EmptyOr(c.KeepalivePeriod, 10)
 	c.MaxIdleTimeout = util.EmptyOr(c.MaxIdleTimeout, 30)
 	c.MaxIncomingStreams = util.EmptyOr(c.MaxIncomingStreams, 100000)
+	c.InitCwnd = util.EmptyOr(c.InitCwnd, 32)
+	c.CongestionControl = util.EmptyOr(c.CongestionControl, "bbr")
 }
 
 type WebServerConfig struct {

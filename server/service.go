@@ -28,7 +28,8 @@ import (
 	"github.com/fatedier/golib/crypto"
 	"github.com/fatedier/golib/net/mux"
 	fmux "github.com/hashicorp/yamux"
-	quic "github.com/quic-go/quic-go"
+	tlsC "github.com/metacubex/mihomo/component/tls"
+	quic "github.com/metacubex/quic-go"
 	"github.com/samber/lo"
 
 	"github.com/fatedier/frp/pkg/auth"
@@ -247,9 +248,9 @@ func NewService(cfg *v1.ServerConfig) (*Service, error) {
 
 	if cfg.QUICBindPort > 0 {
 		address := net.JoinHostPort(cfg.BindAddr, strconv.Itoa(cfg.QUICBindPort))
-		quicTLSCfg := tlsConfig.Clone()
-		quicTLSCfg.NextProtos = []string{"frp"}
-		svr.quicListener, err = quic.ListenAddr(address, quicTLSCfg, &quic.Config{
+		tlsConfig.NextProtos = []string{"frp"}
+		svr.quicListener, err = quic.ListenAddr(address, tlsC.UConfig(tlsConfig), &quic.Config{
+			InitialPacketSize:  1280,
 			MaxIdleTimeout:     time.Duration(cfg.Transport.QUIC.MaxIdleTimeout) * time.Second,
 			MaxIncomingStreams: int64(cfg.Transport.QUIC.MaxIncomingStreams),
 			KeepAlivePeriod:    time.Duration(cfg.Transport.QUIC.KeepalivePeriod) * time.Second,
@@ -257,6 +258,7 @@ func NewService(cfg *v1.ServerConfig) (*Service, error) {
 		if err != nil {
 			return nil, fmt.Errorf("listen on quic udp address %s error: %v", address, err)
 		}
+		log.Debugf("tlsC.UConfig(tlsConfig): %+v", tlsC.UConfig(tlsConfig))
 		log.Infof("frps quic listen on %s", address)
 	}
 

@@ -25,9 +25,10 @@ import (
 	"sync"
 	"time"
 
+	"golang.org/x/sync/errgroup"
+
 	"github.com/fatedier/golib/errors"
 	"github.com/samber/lo"
-	"golang.org/x/sync/errgroup"
 
 	"github.com/fatedier/frp/pkg/msg"
 	"github.com/fatedier/frp/pkg/transport"

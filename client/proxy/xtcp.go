@@ -23,7 +23,8 @@ import (
 	"time"
 
 	fmux "github.com/hashicorp/yamux"
-	"github.com/quic-go/quic-go"
+	tlsC "github.com/metacubex/mihomo/component/tls"
+	"github.com/metacubex/quic-go"
 
 	v1 "github.com/fatedier/frp/pkg/config/v1"
 	"github.com/fatedier/frp/pkg/msg"
@@ -178,11 +179,13 @@ func (pxy *XTCPProxy) listenByQUIC(listenConn *net.UDPConn, _ *net.UDPAddr, star
 		return
 	}
 	tlsConfig.NextProtos = []string{"frp"}
-	quicListener, err := quic.Listen(listenConn, tlsConfig,
+	quicListener, err := quic.Listen(listenConn, tlsC.UConfig(tlsConfig),
 		&quic.Config{
 			MaxIdleTimeout:     time.Duration(pxy.clientCfg.Transport.QUIC.MaxIdleTimeout) * time.Second,
 			MaxIncomingStreams: int64(pxy.clientCfg.Transport.QUIC.MaxIncomingStreams),
 			KeepAlivePeriod:    time.Duration(pxy.clientCfg.Transport.QUIC.KeepalivePeriod) * time.Second,
+			EnableDatagrams:    true,
+			Allow0RTT:          true,
 		},
 	)
 	if err != nil {
@@ -195,6 +198,7 @@ func (pxy *XTCPProxy) listenByQUIC(listenConn *net.UDPConn, _ *net.UDPAddr, star
 		xl.Errorf("quic accept connection error: %v", err)
 		return
 	}
+	netpkg.SetCongestionController(c, pxy.clientCfg.Transport.QUIC.CongestionControl, pxy.clientCfg.Transport.QUIC.InitCwnd)
 	for {
 		stream, err := c.AcceptStream(pxy.ctx)
 		if err != nil {
