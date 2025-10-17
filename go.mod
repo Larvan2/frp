@@ -10,7 +10,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hashicorp/yamux v0.1.2
-	github.com/metacubex/quic-go v0.54.1-0.20250730114134-a1ae705fe295
+	github.com/metacubex/quic-go v0.54.1-0.20250926001022-e2a3ce003b3a
 	github.com/metacubex/randv2 v0.2.0
 	github.com/onsi/ginkgo/v2 v2.22.2
 	github.com/onsi/gomega v1.36.2
@@ -23,7 +23,7 @@ require (
 	github.com/songgao/water v0.0.0-20200317203138-2b4b6d7c09d8
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/pflag v1.0.5
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/testify v1.11.1
 	github.com/tidwall/gjson v1.17.1
 	github.com/vishvananda/netlink v1.3.0
 	github.com/xtaci/kcp-go/v5 v5.6.13
@@ -48,9 +48,9 @@ require (
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/mdlayher/netlink v1.7.2 // indirect
 	github.com/mdlayher/socket v0.4.1 // indirect
-	github.com/metacubex/bart v0.20.5 // indirect
-	github.com/metacubex/sing v0.5.5 // indirect
-	github.com/metacubex/tfo-go v0.0.0-20250827083229-aa432b865617 // indirect
+	github.com/metacubex/bart v0.24.0 // indirect
+	github.com/metacubex/sing v0.5.6 // indirect
+	github.com/metacubex/tfo-go v0.0.0-20250921095601-b102db4216c0 // indirect
 	github.com/miekg/dns v1.1.63 // indirect
 	github.com/mroth/weightedrand/v2 v2.1.0 // indirect
 	github.com/openacid/low v0.1.21 // indirect
@@ -78,8 +78,8 @@ require (
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/klauspost/reedsolomon v1.12.0 // indirect
-	github.com/metacubex/mihomo v1.19.13
-	github.com/metacubex/utls v1.8.1-0.20250823120917-12f5ba126142 // indirect
+	github.com/metacubex/mihomo v1.19.14-0.20250921104836-74a86f147bf8
+	github.com/metacubex/utls v1.8.1-0.20250921102910-221428e5d4b2 // indirect
 	github.com/pion/dtls/v2 v2.2.7 // indirect
 	github.com/pion/logging v0.2.2 // indirect
 	github.com/pion/transport/v2 v2.2.1 // indirect
